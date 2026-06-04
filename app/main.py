@@ -1,18 +1,19 @@
 import os
-import openai
+from openai import OpenAI
 from dotenv import load_dotenv
 
 # Loading environment variables from a .env file
 load_dotenv()
 
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
 def generateImg(text, sz):
-    openai.api_key = os.getenv("OPENAI_API_KEY")  # Setting the API key for OpenAI
-    
     # Creating an image using given prompt text and image size
-    img = openai.Image.create(
-        prompt = text,
-        n = 1,
-        size = sz
+    img = client.images.generate(
+        model="dall-e-3",
+        prompt=text,
+        n=1,
+        size=sz
     )
 
-    return img["data"][0]["url"] # Returning the URL of the generated image
+    return img.data[0].url
