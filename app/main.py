@@ -15,4 +15,5 @@ def generateImg(text, sz):
         quality="medium"
     )
 
-    return img.data[0].url
+    image_base64 = img.data[0].b64_json
+    return f"data:image/png;base64,{image_base64}"
