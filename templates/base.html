@@ -2,44 +2,97 @@
 <html>
 <head>
     <title>AI Image Generator</title>
-    <link rel="stylesheet" href="{{url_for('static', filename='styles/style.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+
+    <style>
+        .loading-box {
+            display: none;
+            color: white;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .loader {
+            margin: 10px auto;
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid orange;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
+
 <body>
     <div class="navabar">
         <nav>
             <ul>
                 <li><a href="https://github.com/sachith-d/AI-Image-Generator">About</a></li>
-                <h3 style="color: white;text-align: left;">AI Image Generator</h3>
+                <h3 style="color: white; text-align: left;">AI Image Generator</h3>
             </ul>
-      </nav>
+        </nav>
     </div>
 
     <div class="hero"></div>
+
     <div class="src">
-        <form action="/generate" method="post">
-            <input type="text" name="prompt" placeholder="Describe An Image"><br>
-            <select name="size">
+        <form action="{{ url_for('generate') }}" method="POST" onsubmit="showLoading()">
+            <input 
+                type="text" 
+                name="prompt" 
+                placeholder="Describe An Image" 
+                required
+            >
+            <br>
+
+            <select name="size" required>
                 <option value="1024x1024">1024x1024</option>
                 <option value="1024x1536">1024x1536</option>
                 <option value="1536x1024">1536x1024</option>
                 <option value="auto">auto</option>
-            </select><br>
-            <button type="submit">Generate</button>
-        </form>
+            </select>
+            <br>
 
+            <button id="generateBtn" type="submit">Generate</button>
+
+            <div id="loadingBox" class="loading-box">
+                <div class="loader"></div>
+                <p>Generating your image... Please wait.</p>
+                <p>This may take 10–30 seconds.</p>
+            </div>
+        </form>
     </div>
 
-      {% block content %}
-    
-      {% endblock %}
-       
+    {% block content %}
+
+    {% endblock %}
+
+    <script>
+        function showLoading() {
+            const generateBtn = document.getElementById("generateBtn");
+            const loadingBox = document.getElementById("loadingBox");
+
+            loadingBox.style.display = "block";
+            generateBtn.disabled = true;
+            generateBtn.innerText = "Generating...";
+        }
+    </script>
 </body>
-
-
-
-
-
-
-
-
 </html>
