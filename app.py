@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-from app.main import generateImg
+from application.main import generateImg
 
 # Initializing a Flask app
 app = Flask(__name__)
